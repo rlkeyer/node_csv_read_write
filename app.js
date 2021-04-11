@@ -1,22 +1,6 @@
 const csv = require("csv-parser");
 const fs = require("fs");
 
-const sortNames = (a, b) => {
-  if (a.lastName < b.lastName) {
-    return -1;
-  }
-  if (a.lastName > b.lastName) {
-    return 1;
-  }
-  if (a.firstName < b.firstName) {
-    return -1;
-  }
-  if (a.firstName > b.firstName) {
-    return 1;
-  }
-  return 0;
-};
-
 const groupByCarrier = (data) => {
   let carriers = {};
   data.forEach((line) => {
@@ -35,9 +19,41 @@ const groupByCarrier = (data) => {
   return carriers;
 };
 
+const sortNames = (a, b) => {
+  if (a.lastName < b.lastName) {
+    return -1;
+  }
+  if (a.lastName > b.lastName) {
+    return 1;
+  }
+  if (a.firstName < b.firstName) {
+    return -1;
+  }
+  if (a.firstName > b.firstName) {
+    return 1;
+  }
+  return 0;
+};
+
+const writeToCsv = (headers, data, outputFileName) => {
+  const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+  const csvWriter = createCsvWriter({
+    path: `${outputFileName}.csv`,
+    header: headers.map((header) => {
+      return { id: header, title: header };
+    }),
+  });
+
+  csvWriter
+    .writeRecords(data)
+    .then(() => console.log(`${outputFileName}.csv written successfully`))
+    .catch((e) => console.log(e));
+};
+
 let arrayData = [];
 
 fs.createReadStream("./enrollments.csv")
+  .on("error", (e) => console.log(e))
   .pipe(csv())
   .on("data", (row) => {
     arrayData.push(row);
@@ -52,16 +68,6 @@ fs.createReadStream("./enrollments.csv")
       );
       insuranceCompanies[property].sort(sortNames);
 
-      const createCsvWriter = require("csv-writer").createObjectCsvWriter;
-      const csvWriter = createCsvWriter({
-        path: `${property}.csv`,
-        header: headers.map((header) => {
-          return { id: header, title: header };
-        }),
-      });
-
-      csvWriter
-        .writeRecords(insuranceCompanies[property])
-        .then(() => console.log(`${property}.csv written successfully`));
+      writeToCsv(headers, insuranceCompanies[property], property);
     }
   });
