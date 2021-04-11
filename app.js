@@ -2,7 +2,7 @@ const csv = require("csv-parser");
 const fs = require("fs");
 
 const groupByCarrier = (data) => {
-  let carriers = {};
+  const carriers = {};
   data.forEach((line) => {
     line.version = parseInt(line.version);
     if (carriers[line.insurance]) {
@@ -50,7 +50,7 @@ const writeToCsv = (headers, data, outputFileName) => {
     .catch((e) => console.log(e));
 };
 
-let arrayData = [];
+const arrayData = [];
 
 fs.createReadStream("./enrollments.csv")
   .on("error", (e) => console.log(e))
@@ -60,7 +60,7 @@ fs.createReadStream("./enrollments.csv")
   })
   .on("end", () => {
     const headers = Object.keys(arrayData[0]);
-    let insuranceCompanies = groupByCarrier(arrayData);
+    const insuranceCompanies = groupByCarrier(arrayData);
 
     for (const property in insuranceCompanies) {
       insuranceCompanies[property] = Object.values(
