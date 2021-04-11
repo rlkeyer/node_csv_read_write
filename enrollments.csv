@@ -1,0 +1,13 @@
+userId,firstName,lastName,version,insurance
+1a,Mark,Smith,1,Humana
+2b,John,Smith,2,Anthem
+3c,Joseph,Smith,1,Humana
+4d,Jane,Johnson,2,Humana
+5e,Mary,Adams,1,Anthem
+1a,Mark,Smith,1,Humana
+1a,Mark,Smith,6,Humana
+3c,Joseph,Smith,9,Humana
+5f,Anne,Johnson,2,Humana
+6g,John,Adams,6,CareSource
+7v,Erik,B,2,CareSource
+9o,Jerry,Smith,9,CareSource
